@@ -1,0 +1,158 @@
+<div class="page">
+  <div class="card">
+    <h2 class="title">Flight Information</h2>
+
+    <form (ngSubmit)="submit()" #flightForm="ngForm">
+      <div class="field">
+        <label class="label" [class.required]="isFieldInvalid(airline)">
+          Airline<span *ngIf="isFieldInvalid(airline)">*</span>
+        </label>
+
+        <input
+          class="input"
+          name="airline"
+          placeholder="Airline"
+          [(ngModel)]="airline"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label class="label" [class.required]="isFieldInvalid(flightNumber)">
+          Flight number<span *ngIf="isFieldInvalid(flightNumber)">*</span>
+        </label>
+
+        <input
+          class="input"
+          name="flightNumber"
+          placeholder="Flight Number"
+          [(ngModel)]="flightNumber"
+          required
+        />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label class="label" [class.required]="isFieldInvalid(arrivalDate)">
+            Arrival date<span *ngIf="isFieldInvalid(arrivalDate)">*</span>
+          </label>
+
+          <input
+            class="input"
+            type="date"
+            name="arrivalDate"
+            [(ngModel)]="arrivalDate"
+            [min]="today"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label
+          class="label"
+          [class.required]="isFieldInvalid(arrivalHour) || isFieldInvalid(arrivalMinute)"
+        >
+          Arrival Time
+          <span *ngIf="isFieldInvalid(arrivalHour) || isFieldInvalid(arrivalMinute)">*</span>
+        </label>
+
+        <div class="time-row">
+          <div class="select-wrap">
+            <select
+              class="select"
+              [(ngModel)]="arrivalHour"
+              name="arrivalHour"
+              required
+            >
+              <option value="" disabled>HH</option>
+              <option *ngFor="let h of hours" [value]="h">{{ h }}</option>
+            </select>
+
+            <span class="chev">▾</span>
+          </div>
+
+          <span class="time-colon">:</span>
+
+          <div class="select-wrap">
+            <select
+              class="select"
+              [(ngModel)]="arrivalMinute"
+              name="arrivalMinute"
+              required
+            >
+              <option value="" disabled>MM</option>
+              <option *ngFor="let m of minutes" [value]="m">{{ m }}</option>
+            </select>
+
+            <span class="chev">▾</span>
+          </div>
+
+          <div class="select-wrap">
+            <select
+              class="select"
+              [(ngModel)]="meridiem"
+              name="meridiem"
+              required
+            >
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+
+            <span class="chev">▾</span>
+          </div>
+        </div>
+
+        <div class="hint" *ngIf="arrivalHour && arrivalMinute">
+          Will submit as:
+          <strong>{{ arrivalHour }}:{{ arrivalMinute }} {{ meridiem }}</strong>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" [class.required]="isFieldInvalid(numOfGuests)">
+          Number of guests<span *ngIf="isFieldInvalid(numOfGuests)">*</span>
+        </label>
+
+        <input
+          class="input"
+          type="number"
+          name="numOfGuests"
+          placeholder="Number of Guests"
+          [(ngModel)]="numOfGuests"
+          required
+          min="1"
+          step="1"
+          inputmode="numeric"
+          (keydown)="blockInvalidNumberInput($event)"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Comments (optional)</label>
+
+        <textarea
+          class="textarea"
+          name="comments"
+          placeholder="Comments (optional)"
+          [(ngModel)]="comments"
+        ></textarea>
+      </div>
+
+      <button class="btn btn-primary" type="submit" [disabled]="loading">
+        {{ loading ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+
+    <p *ngIf="error" class="msg error">{{ error }}</p>
+  </div>
+
+  <div class="form-success-overlay" *ngIf="showSuccessModal">
+    <div class="form-success-modal">
+      <p>{{ successModalMessage }}</p>
+      <button class="btn btn-primary" type="button" (click)="closeSuccessModal()">
+        OK
+      </button>
+    </div>
+  </div>
+</div>

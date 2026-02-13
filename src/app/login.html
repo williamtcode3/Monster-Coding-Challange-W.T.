@@ -1,0 +1,116 @@
+<div class="page">
+  <div class="card">
+    <div *ngIf="!AccountCreation">
+      <h1 class="title title-sm">Welcome</h1>
+      <p class="subtitle">Please login to confirm your flight details</p>
+
+      <button class="btn btn-primary" type="button" (click)="showEmail = !showEmail">
+        Sign in with email &amp; password
+      </button>
+
+      <div class="expand" *ngIf="showEmail">
+        <div class="msg error" *ngIf="loginError">
+          {{ loginError }}
+        </div>
+
+        <input
+          class="input"
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="loginEmail"
+        />
+
+        <input
+          class="input"
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="loginPassword"
+        />
+
+        <a
+          class="forgot-link"
+          href="#"
+          (click)="$event.preventDefault(); forgotPassword()"
+        >
+          Forgot password?
+        </a>
+
+        <button class="btn btn-secondary" type="button" (click)="signIn()">
+          Sign in
+        </button>
+      </div>
+
+      <button class="btn btn-google" type="button" (click)="signInWithGoogle()">
+        Sign in with Google
+      </button>
+
+      <div class="divider-wrap">
+        <div class="divider"></div>
+      </div>
+
+      <a
+        class="createlink"
+        href="#"
+        (click)="$event.preventDefault(); AccountCreation = true"
+      >
+        Create account
+      </a>
+    </div>
+
+    <div *ngIf="AccountCreation">
+      <button class="back-btn" (click)="AccountCreation = false">
+        ← Back
+      </button>
+
+      <h1 class="title">Create Account</h1>
+
+      <input
+        class="input"
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="createEmail"
+      />
+
+      <div class="PasswordGuidelines" *ngIf="passwordTouched && passwordInvalid">
+        Password must be 8–16 characters and include at least one number and one special character.
+      </div>
+
+      <input
+        class="input"
+        type="password"
+        placeholder="Create Password"
+        [(ngModel)]="createPassword"
+        (ngModelChange)="onPasswordInput()"
+      />
+
+      <div class="PasswordGuidelines" *ngIf="confirmTouched && passwordsMismatch">
+        Passwords do not match.
+      </div>
+
+      <input
+        class="input"
+        type="password"
+        placeholder="Retype Password"
+        [(ngModel)]="confirmPassword"
+        (ngModelChange)="onConfirmInput()"
+      />
+
+      <button class="btn btn-primary" type="button" (click)="createAccount()">
+        Create Account
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showVerifyModal">
+    <div class="modal">
+      <p>{{ verifyModalMessage }}</p>
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="showVerifyModal = false; AccountCreation = false;"
+      >
+        OK
+      </button>
+    </div>
+  </div>
+</div>
