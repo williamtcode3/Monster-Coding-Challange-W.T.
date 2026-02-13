@@ -8,7 +8,7 @@
         Sign in with email &amp; password
       </button>
 
-      <div class="expand" *ngIf="showEmail">
+      <form class="expand" *ngIf="showEmail" (ngSubmit)="signIn()">
         <div class="msg error" *ngIf="loginError">
           {{ loginError }}
         </div>
@@ -18,6 +18,8 @@
           type="email"
           placeholder="Email"
           [(ngModel)]="loginEmail"
+          name="loginEmail"
+          required
         />
 
         <input
@@ -25,6 +27,8 @@
           type="password"
           placeholder="Password"
           [(ngModel)]="loginPassword"
+          name="loginPassword"
+          required
         />
 
         <a
@@ -35,10 +39,11 @@
           Forgot password?
         </a>
 
-        <button class="btn btn-secondary" type="button" (click)="signIn()">
+        <button class="btn btn-secondary" type="submit">
           Sign in
         </button>
-      </div>
+      </form>
+
 
       <button class="btn btn-google" type="button" (click)="signInWithGoogle()">
         Sign in with Google
@@ -63,6 +68,10 @@
       </button>
 
       <h1 class="title">Create Account</h1>
+
+      <div class="msg error" *ngIf="createError">
+        {{ createError }}
+      </div>
 
       <input
         class="input"

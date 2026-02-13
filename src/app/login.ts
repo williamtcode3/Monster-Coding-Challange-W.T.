@@ -29,6 +29,7 @@ export class LoginPage {
   loginPassword = '';
 
   loginError = '';
+  createError = '';
 
   createEmail = '';
   createPassword = '';
@@ -91,9 +92,15 @@ async signIn() {
 
   async createAccount() {
     const email = this.createEmail.trim();
+    this.createError = '';
 
     try {
-      const cred = await createUserWithEmailAndPassword(this.auth, email, this.createPassword);
+      const cred = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        this.createPassword
+      );
+
       await sendEmailVerification(cred.user);
 
       this.zone.run(() => {
@@ -102,10 +109,18 @@ async signIn() {
       });
 
       this.cdr.detectChanges();
-    } catch {
-      return;
+    } catch (err: any) {
+      this.zone.run(() => {
+        if (err?.code === 'auth/email-already-in-use') {
+          this.createError = 'Email already in use.';
+        } else {
+          this.createError = 'Unable to create account.';
+        }
+      });
+      this.cdr.detectChanges();
     }
   }
+
 
   async signInWithGoogle() {
     try {

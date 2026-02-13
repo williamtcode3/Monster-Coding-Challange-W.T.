@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/CodingChallenge",
+    "public": "dist/CodingChallenge/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
